@@ -6,8 +6,8 @@ import zipfile
 import streamlit as st
 from engine import Inspector, MODEL_ID, LABELS, read_image, summarize, png_bytes
 
-st.set_page_config(page_title='Wire Inspector', page_icon='🔎', layout='wide')
-st.title('Wire Inspector')
+st.set_page_config(page_title='CableGuard-X: Digital-Twin-Assisted Multi-View Cable Surface Mapping, Electrical Screening, and Predictive Inspection System', page_icon='🔎', layout='wide')
+st.title('CableGuard-X: Digital-Twin-Assisted Multi-View Cable Surface Mapping, Electrical Screening, and Predictive Inspection System')
 st.caption('Upload a wire image • Find possible defects • Inspect segmentation masks')
 st.info('Experimental pretrained AI. Masks are approximate; burnmark, cut, crack and scratch predictions require visual review.')
 

@@ -18,6 +18,9 @@ overlay.png
 mask.png
 report.json
 
+# Local source photos and augmented datasets
+data/
+
 # Editor and OS files
 .vscode/
 .idea/

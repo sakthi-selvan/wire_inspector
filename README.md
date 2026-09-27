@@ -1,4 +1,4 @@
-# Wire Inspector — pretrained segmentation prototype
+# CableGuard-X: Digital-Twin-Assisted Multi-View Cable Surface Mapping, Electrical Screening, and Predictive Inspection System
 
 Upload a wire photo to a small Streamlit interface and inspect candidate burnmarks,
 cuts, cracks and scratches. Download an overlay, class-index mask and JSON report.
@@ -12,6 +12,30 @@ other project files are required. It installs dependencies, loads CLIPSeg, promp
 for one image, displays adjustable candidate masks, and downloads a results ZIP.
 GPU is optional; CPU also works. Photos are processed in the Colab runtime.
 Rerun cells 4–6 for another image, or only cells 5–6 to change mask settings.
+
+## Generate augmented images
+
+Place source JPG, PNG or WebP images directly in `data/`, then run:
+
+```powershell
+.venv\Scripts\python.exe augment_images.py --input data --output data/augmented --count 10000 --size 512 --seed 42
+```
+
+Only Pillow is needed for this script (`pip install "Pillow>=10.4,<13"`).
+It creates 10,000 total JPEGs at 512 × 512 pixels, distributed evenly across the
+source images (5,000 each for two inputs). Rotation, flips, brightness, contrast,
+color, slight blur, scale and position vary reproducibly with the seed in the same
+Pillow environment. The full photo is preserved with gray padding rather than
+cropping; resizing can reduce visibility of small defects. A CSV manifest records
+each source, source/output SHA-256 hashes and transformations. Existing nonempty
+output folders are refused to prevent accidental overwrites; use a new output path
+for another run. The `data/` folder is excluded from Git.
+
+These are augmented copies, not independent observations or newly labeled defect
+examples. No segmentation masks are generated. Split by physical cable/source
+**before augmentation**, keeping related images together; randomly splitting the
+variants creates data leakage. Two damaged photos cannot supply a representative
+normal class or validate performance on unseen cables.
 
 ## Windows quick start (Python 3.11 or 3.12 recommended)
 
