@@ -1,11 +1,10 @@
 """One pretrained model; no external inference API or fabricated detections."""
 import io
 import numpy as np
-from PIL import Image, ImageDraw, ImageFont, ImageOps
+from PIL import Image, ImageOps
 
 MODEL_ID = 'CIDAS/clipseg-rd64-refined'
 LABELS = ['Burnmark', 'Cut', 'Crack', 'Scratch']
-WATERMARK = '@sakthi all rights are reserved'
 PROMPTS = [
     'a burnt scorched patch on electrical wire insulation',
     'a cut opening in electrical wire insulation',
@@ -94,28 +93,8 @@ def summarize(image, maps, threshold=0.5, wire_threshold=0.35, min_pixels=30):
     for i, color in enumerate(COLORS):
         region = mask_ids == i + 1
         overlay[region] = (overlay[region] * 0.5 + np.array(color) * 0.5).astype('uint8')
-    return status, rows, watermark_overlay(Image.fromarray(overlay)), Image.fromarray(mask_ids)
+    return status, rows, Image.fromarray(overlay), Image.fromarray(mask_ids)
 
-
-def watermark_overlay(image):
-    """Add a white, outlined credit to the overlay without changing mask data."""
-    result = image.convert('RGB').copy()
-    draw = ImageDraw.Draw(result)
-    margin = max(1, min(12, result.width // 40, result.height // 40))
-    size = max(1, min(32, max(12, result.width // 35)))
-    while True:
-        font = ImageFont.load_default(size=size)
-        stroke = 1 if size >= 8 else 0
-        left, top, right, bottom = draw.textbbox(
-            (0, 0), WATERMARK, font=font, stroke_width=stroke)
-        if (right - left <= result.width - 2 * margin and
-                bottom - top <= result.height - 2 * margin) or size == 1:
-            break
-        size -= 1
-    position = (result.width - margin - right, result.height - margin - bottom)
-    draw.text(position, WATERMARK, font=font, fill='white',
-              stroke_width=stroke, stroke_fill='black')
-    return result
 
 def png_bytes(image):
     output = io.BytesIO()
