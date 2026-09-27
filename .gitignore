@@ -1,0 +1,25 @@
+# Local Python environments and caches
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ipynb_checkpoints/
+
+# Local credentials and configuration
+.env
+.env.*
+!.env.example
+.streamlit/secrets.toml
+
+# Generated inspection results
+wire_inspection_results.zip
+overlay.png
+mask.png
+report.json
+
+# Editor and OS files
+.vscode/
+.idea/
+Thumbs.db
+.DS_Store
